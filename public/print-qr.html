@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Print QR Codes</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .qr-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+      }
+      .qr-item {
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        background: #f9f9f9;
+      }
+      .qr-item img {
+        width: 120px;
+        height: 120px;
+      }
+      .bike-id {
+        margin-top: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+      }
+      @media print {
+        .no-print {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bike QR Codes</h1>
+    <button class="no-print" onclick="window.print()">🖨️ Print QR Codes</button>
+
+    <div class="qr-grid" id="qrGrid">
+      <!-- QR codes will be inserted here dynamically -->
+    </div>
+
+    <script>
+      const qrCodes = [
+        {
+          bikeId: "680f99f76b3fd87a21a73ca8",
+          qrCode:
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJQAAACUCAYAAAB1PADUAAAAAklEQVR4AewaftIAAATsSURBVO3BQY4cSRIEQdNA/f/Lun30vQSQSK8GyTE...", // shorten here
+        },
+      ];
+
+      const qrGrid = document.getElementById("qrGrid");
+
+      qrCodes.forEach(({ bikeId, qrCode }) => {
+        const div = document.createElement("div");
+        div.className = "qr-item";
+        div.innerHTML = `
+        <img src="${qrCode}" alt="QR Code for ${bikeId}" />
+        <div class="bike-id">${bikeId}</div>
+      `;
+        qrGrid.appendChild(div);
+      });
+    </script>
+  </body>
+</html>
