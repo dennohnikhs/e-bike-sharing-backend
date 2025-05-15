@@ -7,6 +7,7 @@ const {
 } = require("../controllers/BookingController");
 const { updateBike } = require("../controllers/BikeController");
 const { userAuthMiddleware } = require("../middlewares/userAuthMiddleware");
+const { sendStkPush } = require("../controllers/StkPushControllers");
 
 const router = express.Router();
 
@@ -17,6 +18,6 @@ router.use(protect);
 router.post("/book", userAuthMiddleware, createBooking);
 router.get("/my-bookings", userAuthMiddleware, getMyBookings);
 router.patch("/edit-bike/:uuid", updateBike);
-router.post("/pay-mpesa", payMpesa);
+router.post("/pay-mpesa", sendStkPush);
 
 module.exports = router;

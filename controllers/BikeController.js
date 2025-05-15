@@ -105,6 +105,30 @@ const searchBikeByQRCode = async (req, res) => {
   }
 };
 
+const getBikeByUuid = async (req, res) => {
+  try {
+    const { uuid } = req.params;
+    const bike = await Bike.findOne({ uuid });
+
+    if (!bike) {
+      return res.status(404).json({
+        status: "error",
+        message: "Bike not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: bike,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Error finding bike",
+      error: error.message,
+    });
+  }
+};
 const updateBike = async (req, res) => {
   try {
     const { uuid } = req.params;
@@ -151,8 +175,9 @@ const updateBike = async (req, res) => {
     });
   }
 };
-
 module.exports = {
+  getBikeByUuid,
+  getBikeById,
   addBike,
   getAllBikes,
   getBikeById,

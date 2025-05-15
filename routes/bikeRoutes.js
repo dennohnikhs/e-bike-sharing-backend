@@ -6,12 +6,13 @@ const {
   getBikeById,
   searchBikeByQRCode,
   updateBike,
+  getBikeByUuid,
 } = require("../controllers/BikeController");
 
 const router = express.Router();
 
 router.post("/", protect, addBike);
 router.get("/", getAllBikes);
-router.get("/:id", getBikeById);
+router.get("/:uuid", getBikeByUuid);
 
 module.exports = router;
