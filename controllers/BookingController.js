@@ -1,17 +1,19 @@
 const Booking = require("../models/Booking");
-const axios = require("axios");
 
 const createBooking = async (req, res) => {
   try {
-    const { bikeId } = req.body;
+    const { bikeUuid } = req.body;
     const userId = req.user._id; // From auth middleware
 
-    if (!bikeId) {
-      return res.status(400).json({ message: "Bike ID is required" });
+    if (!bikeUuid) {
+      return res.status(400).json({ message: "Bike UUID is required" });
     }
 
     const booking = new Booking({
-      bike: bikeId,
+      startTime: Date.now(),
+      status: "active",
+      uuid: bikeUuid, // Assuming bikeUuid is the unique identifier for the booking
+      // You might want to generate a unique UUID here instead
       user: userId,
     });
 
@@ -43,10 +45,38 @@ const completeBooking = async (req, res) => {
 
 const getMyBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user._id })
-      .populate("bike")
-      .sort("-createdAt");
+    const bookings = await Booking.find({ user: req.user._id });
+    // .populate("bike")
+    // .sort("-createdAt");
     res.json({ success: true, data: bookings });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+const getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find().sort("-createdAt");
+
+    // .populate("bike")
+    // .populate("user")
+    res.json({ success: true, data: bookings });
+    // sort bookings by createdAt
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const editBikeBookingStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      // Assuming you want to update the status of the booking
+      // and not the bike itself
+      { new: true }
+    );
+    res.json({ success: true, data: booking });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -55,5 +85,7 @@ const getMyBookings = async (req, res) => {
 module.exports = {
   createBooking,
   completeBooking,
+  editBikeBookingStatus,
   getMyBookings,
+  getAllBookings,
 };

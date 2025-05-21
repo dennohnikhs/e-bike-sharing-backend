@@ -42,5 +42,12 @@ const isAdmin = (req, res, next) => {
     res.status(403).json({ message: "Access denied. Admin only." });
   }
 };
+const isUser = (req, res, next) => {
+  if (req.user && req.user.role === "user") {
+    next();
+  } else {
+    res.status(403).json({ message: "Access denied. User only." });
+  }
+};
 
-module.exports = { protect, isAdmin };
+module.exports = { protect, isAdmin, isUser };
