@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema(
   {
-    bike: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Bike",
+    uuid: {
+      type: String,
+      unique: true,
       required: true,
     },
     user: {
